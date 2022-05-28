@@ -9,7 +9,8 @@ from .collection import Collection
 
 
 class NFTDropdown(discord.ui.Select):
-    def __init__(self, params, projects):
+    def __init__(self, params, projects, api):
+        self.api = api
 
         options = []
 
@@ -20,13 +21,13 @@ class NFTDropdown(discord.ui.Select):
         super().__init__(placeholder='Choose NFT project', min_values=1, max_values=1, options=options)
 
     def get_project_info(self, pr_id: int):
-        url = 'http://api.coolguys.space/project-info'
+        url = f'{self.api}/project-info'
         myobj = {"user":"xyz","password":"xyz", "project_id": pr_id}
         x = requests.post(url, json=myobj)
         return x.json()
 
     def get_project_info_by_name(self, name: str):
-        url = 'http://api.coolguys.space/project-info-name'
+        url = f'{self.api}/project-info-name'
         myobj = {"user":"xyz","password":"xyz", "project_name": name}
         x = requests.post(url, json=myobj)
         return x.json()
@@ -42,19 +43,20 @@ class NFTDropdown(discord.ui.Select):
 
 
 class NFTDropdownView(discord.ui.View):
-    def __init__(self, params, projects):
+    def __init__(self, params, projects, api):
         super().__init__()
 
-        self.add_item(NFTDropdown(params, projects))
+        self.add_item(NFTDropdown(params, projects, api))
 
 
 class NFTDrop(commands.Cog, name='NFTDrop'):
 
     def __init__(self, bot: utils.CustomBot):
         self.bot: utils.CustomBot = bot
+        self.api = bot.config.hqr_api()
 
     def get_project_list(self, params):
-        url = 'http://api.coolguys.space/projects-like'
+        url = f'{self.api}/projects-like'
         myobj = {"user":"xyz","password":"xyz", "project_id": 1, "like": params}
         x = requests.post(url, json=myobj)
         return x.json()['projects']
@@ -69,7 +71,7 @@ class NFTDrop(commands.Cog, name='NFTDrop'):
             if len(projects) == 0:
                 await ctx.send('No match found.')
             else:
-                await ctx.send('Matching collections:', view=NFTDropdownView(params, projects))
+                await ctx.send('Matching collections:', view=NFTDropdownView(params, projects, self.api))
 
 
 async def setup(bot):

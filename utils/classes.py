@@ -4,7 +4,7 @@ import yaml
 
 from discord import Message, User
 from discord.ext import commands, menus
-from dotenv import dotenv_values
+from .config import Config
 
 from typing import Union, Optional, Dict, List
 
@@ -39,7 +39,7 @@ class CustomBot(commands.Bot):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self.config = dotenv_values(".env")
+        self.config = Config()
         self.cogs_list: List[str] = []
         self.fully_ready = False
         self.session = None

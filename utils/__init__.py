@@ -2,3 +2,4 @@
 
 from utils.classes import *
 from utils.func import *
+from utils.config import *

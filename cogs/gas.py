@@ -16,15 +16,15 @@ class GasEth(commands.Cog, name='GasEth'):
 
     def __init__(self, bot: utils.CustomBot):
         self.bot: utils.CustomBot = bot
+        self.eth_api_key = self.bot.config.etherscan_api_key()
 
     @commands.command(aliases=['fee'])
     async def gas(self, ctx: utils.CustomContext):
         """Shows Gas values."""
 
-        api_key = self.bot.config['ETHERSCAN_API_KEY']
-        gas_api = f'https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey={api_key}'
+        gas_api = f'https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey={self.eth_api_key}'
         gas_value = requests.post(gas_api)
-        gas_title = ':fuelpump: Jaki mamy Gas?'
+        gas_title = ':fuelpump: Gas Value'
         if gas_value.status_code == 200:
             gas_price = gas_value.json()['result']
             print(f'Gas {gas_price}')
@@ -40,7 +40,7 @@ class GasEth(commands.Cog, name='GasEth'):
         else:
             embed = utils.create_embed(title=gas_title, color='#DC143C')
             embed.description = ""
-            embed.add_field(name=':disappointed_relieved: Mam problem', value=f'Nie udało się pobrać danych. \nSpróbuj później.', inline=False)
+            embed.add_field(name=':disappointed_relieved: Something went wrong', value=f'Couldn\'t retrive data. \nTry again later.', inline=False)
             await ctx.send(embed=embed)
 
 async def setup(bot):

@@ -15,10 +15,17 @@ class Collection:
         return f'https://opensea.io/collection/{slug}'
 
     def etherscan(self):
-        return self.opensea['primary_asset_contracts'][0]['address']
+        try:
+            etherscan = self.opensea['primary_asset_contracts'][0]['address']
+        except IndexError:
+            etherscan = None
+        return etherscan
 
     def etherscan_url(self):
-        return f'https://etherscan.io/address/{self.etherscan()}'
+        if self.etherscan():
+            return f'https://etherscan.io/address/{self.etherscan()}'
+        else:
+            return None
 
     def description(self):
         return self.opensea['description']
@@ -77,9 +84,8 @@ class Collection:
 
         return dashboard
 
-    def embed(self):
-        embed_color = discord.Color.green()
-        embed = utils.create_embed(title=self.name(), color='#cc00ff', image=self.banner(), thumbnail=self.logo())
+    def embed(self, color='#39ff14', title_prefix=''):
+        embed = utils.create_embed(title=f'{title_prefix}{self.name()}', color=color, image=self.banner(), thumbnail=self.logo())
         embed.description = self.description()
         embed.add_field(name="Opensea", value=f'[{self.name()}]({self.opensea_url()})', inline=True)
         embed.add_field(name="Etherscan", value=f'[{self.etherscan()}]({self.etherscan_url()})', inline=True)
