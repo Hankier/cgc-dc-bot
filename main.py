@@ -9,6 +9,7 @@ cogs = [
     'cogs.gas',
     'cogs.nft',
     'cogs.test',
+    'cogs.add_collection',
     'cogs.list'
 ]
 
@@ -47,7 +48,7 @@ async def startup():
 
     async with aiohttp.ClientSession(headers=headers) as session:
         bot.session = session
-        await bot.start(bot.config['BOT_DC_TOKEN'])
+        await bot.start(bot.config.dc_token())
 
 if __name__ == '__main__':
     asyncio.run(startup())

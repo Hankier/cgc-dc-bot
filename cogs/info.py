@@ -24,8 +24,10 @@ class Info(commands.Cog, name='Information'):
         description = """
         `info` - wyświetla pomoc,
         `gas` - pokazuje koszty gasu w GWEI,
-        `list` - wyświetla listę śledzonych kolekcji (dużo pojektów, raczej nie polecam używać),
-        `nft <fraza>` - wyświetla listę wyboru kolekcji które zawierają <fraza> aby wyświetlić informacje.
+        `nft <fraza>` - wyświetla listę wyboru kolekcji które zawierają <fraza> aby wyświetlić informacje,
+        `add <slug>` - dodaje kolekcje o podanym slugu (dla CGC link opensea to `https://opensea.io/collection/coolguyscapital` a slug to końcówka `coolguyscapital`,
+        `add ` - wyświetla pomoc jak pobrać slug kolekcji,
+        `list` - wyświetla listę śledzonych kolekcji (dużo pojektów, raczej nie polecam używać).
 
         Jestem otwarty, zgłaszaj wszystkie pomysły, bugi, zadawaj pytania, postaram się odpowiedzieć. :)
         """
